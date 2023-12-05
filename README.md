@@ -70,6 +70,7 @@ Laubhills:<br>
 ![Alt text](image-10.png)
 * Jika sudah maka dalam 1 Subnet ini semuanya pasti bisa saling melakukan ping
 * Konfigurasi IP ini dilakukan ke SETIAP Router dan Client nya sebagaimana pembagian IP di sheet perhitungan saya
+* Untuk melihat CONFIG LENGKAPNYA silahkan import file .pkt yang ada di repo ke CPT
 
 
 - isi config routing dan jelasin singkat
