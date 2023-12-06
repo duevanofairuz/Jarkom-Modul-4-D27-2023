@@ -30,12 +30,13 @@ Sebelumnya saya lakukan pembagian subnet (rute) sebagai berikut:<br>
 ![Alt text](image-2.png)
 
 * dari pembagian subnet ini nantinya akan saya temukan pembagian ip yang sesuai menggunakan metode classless VLSM dan CIDR Tree
+* perhitungan ip sudah termasuk ip router
 * pembagian ip digunakan untuk melakukan subnetting pada topologi
 * setelah subnetting berhasil langkah terakhir adalah melakukan routing
 
 ### 1. VLSM (CPT)
 ![Alt text](image-5.png)<br><br><br>
-Berikut ini adalah VLSM tree yang telah saya buat:
+**Berikut ini adalah VLSM tree yang telah saya buat:**
 ![Alt text](image-3.png)
 * karena pada pembagian subnet tercatat total ip adalah 4255 dan netmask cukup menampungnya adalah /19 yang mana mampu menampung ip sebanyak 8190
 * root dari tree adalah netmask /19 dengan ip yang dimulai dari 10.35.0.0
@@ -48,7 +49,7 @@ Berikut ini adalah VLSM tree yang telah saya buat:
 sehingga diperoleh pembagian ip VLSM: <br>
 ![Alt text](image-4.png)
 
-Berikut ini adalah isi config pembagian IP VLSM (subnetting) di CPT:
+**Berikut ini adalah isi config pembagian IP VLSM (Subnetting) di CPT:**<br>
 Untuk isi config pembagian ip saya set seperti ini:
 * Router memliki `IP NID + 1`
 * Host / Client memiliki `IP Rourter + 1` atau `IP Client sesubnet + 1`
@@ -69,12 +70,105 @@ Laubhills:<br>
 
 ![Alt text](image-10.png)
 * Jika sudah maka dalam 1 Subnet ini semuanya pasti bisa saling melakukan ping
-* Konfigurasi IP ini dilakukan ke SETIAP Router dan Client nya sebagaimana pembagian IP di sheet perhitungan saya
-* Untuk melihat CONFIG LENGKAPNYA silahkan import file .pkt yang ada di repo ke CPT
+* Konfigurasi IP ini dilakukan ke SETIAP subnet nya sebagaimana pembagian IP di sheet perhitungan saya
+* Untuk melihat CONFIG SELENGKAPNYA silahkan import file .pkt yang ada di repo ke CPT atau cek config berikut:
+
+* Rohrroad:<br>
+![Alt text](image-11.png)<br>
+* Flamme: <br>
+![Alt text](image-12.png)<br>
+* SchwerMountains: <br>
+![Alt text](image-13.png)<br>
+* Himmel: <br>
+![Alt text](image-14.png)<br>
+* Frieren: <br>
+![Alt text](image-15.png)<br>
+* LakeKoridor: <br>
+![Alt text](image-16.png)<br>
+* Aura: <br>
+![Alt text](image-17.png)<br>
+* Denken: <br>
+![Alt text](image-18.png)<br>
+* RoyalCapital: <br>
+![Alt text](image-19.png)<br>
+* WilleRegion: <br>
+![Alt text](image-20.png)<br>
+* Eisen: <br>
+![Alt text](image-21.png)<br>
+* Richter: <br>
+![Alt text](image-22.png)<br>
+* Revolte: <br>
+![Alt text](image-23.png)<br>
+* Stark: <br>
+![Alt text](image-24.png)<br>
+* Lugner: <br>
+![Alt text](image-25.png)<br>
+* TurkRegion: <br>
+![Alt text](image-26.png)<br>
+* GrobeForest: <br>
+![Alt text](image-27.png)<br>
+* Linie: <br>
+![Alt text](image-28.png)<br>
+* GranzChannel: <br>
+![Alt text](image-29.png)<br>
+* Lawine: <br>
+![Alt text](image-30.png)<br>
+* BredtRegion: <br>
+![Alt text](image-31.png)<br>
+* Heiter: <br>
+![Alt text](image-32.png)<br>
+* Sein: <br>
+![Alt text](image-33.png)<br>
+* RiegelCanyon: <br>
+![Alt text](image-34.png)<br>
 
 
-- isi config routing dan jelasin singkat
-- beberapa contoh output ping vlsm di cpt
+
+
+**Routing**<br>
+![Alt text](image-35.png)<br>
+Untuk routing dilakukan dengan cara beberapa tahap:
+* routing dilakukan dengan cara static dimana next hop dari routing adalah adjacent router terdekat dengan subnet yang ingin dituju, semisal aura ingin berkenalan dengan subnet a1 maka NID dan netmask diisi milik a1 dan next-hop nya adalah frieren
+* binding everywhere (0.0.0.0) dilakukan seperti gambar di atas
+* kemudian untuk setiap router yang terhubung dengan router lain (nexthop untuk berkenalan lebih dari 1hop) yang memiliki host/client perlu mengenali subnet mereka juga
+* contoh:<br> - flamme harus berkenalan dengan subnet a1 dan a4 <br>
+          - frieren harus berkenalan dengan subnet a1, a2, a3, a4, a5<br>
+          - aura harus berkenalan dengan semua subnet kecuali subnet a8, a10, a11<br>
+          - lawine harus berkenalan dengan subnet a21<br>
+          - linie harus berkenalan dengan subnet a20, a21<br>
+          - eisen harus berkenalan dengan subnet a15, a16, a18, a19, a20, a21<br>
+          - dst.<br>
+* binding everywhere dari setiap router cukup 1 saja yang mengarah ke router aura / terdekat dengan aura, hal ini dilakukan untuk efisiensi routing (100% success)
+* jika aura sudah disetup sebagaimana pengaturan routing di atas maka otomatis semua subnet bisa saling mengenal via aura 
+* Untuk melihat CONFIG SELENGKAPNYA silahkan import file .pkt yang ada di repo ke CPT atau cek config berikut:
+
+* Fern:<br>
+![Alt text](image-36.png)<br>
+* Flamme: <br>
+![Alt text](image-37.png)<br>
+* Himmel: <br>
+![Alt text](image-38.png)<br>
+* Frieren:<br>
+![Alt text](image-39.png)<br>
+* Aura: <br>
+SEMUA SUBNET KECUALI SUBNET A8, A10, A11
+* Denken: <br>
+![Alt text](image-40.png)<br>
+* Eisen: <br>
+![Alt text](image-41.png)<br>
+* Lugner: <br>
+![Alt text](image-42.png)<br>
+* Linie: <br>
+![Alt text](image-43.png)<br>
+* Lawine: <br>
+![Alt text](image-44.png)<br>
+* Heiter: <br>
+![Alt text](image-45.png)<br>
+
+
+**Berikut ini adalah beberapa contoh output ping**<br>
+![Alt text](image-46.png)
+
 
 ### 2. CIDR (GNS3)
 - pembuatan tree cidr & gambar pembagian ip
