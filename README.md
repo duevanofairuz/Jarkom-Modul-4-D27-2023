@@ -171,7 +171,109 @@ SEMUA SUBNET KECUALI SUBNET A8, A10, A11
 
 
 ### 2. CIDR (GNS3)
-- pembuatan tree cidr & gambar pembagian ip
-- isi config ip cidr
-- isi config routing dan jelasin singkat kasih 	[Markdown - Link](#Jarkom-Modul-4-D27-2023)
-- beberapa contoh output ping cidr di gns
+![Alt text](image-47.png)<br><br>
+**Berikut ini adalah proses pembuatan CIDR Tree**<br>
+![Alt text](image-48.png)
+
+Proses penggabungan subnet dapat dilihat di Sheet perhitungan di atas atau cek disini:
+I.<br>
+![Alt text](image-49.png)
+
+II.<br>
+![Alt text](image-50.png)
+
+III.<br>
+![Alt text](image-51.png)
+
+IV.<br>
+![Alt text](image-52.png)
+
+V.<br>
+![Alt text](image-53.png)
+
+VI.<br>
+![Alt text](image-54.png)
+
+* Penggabungan CIDR disini saya lakukan dengan cara iterasi pertama bertujuan untuk membuat subnet B agar semua jarak subnet adalah minimal 2 Hop ke Aura
+* iterasi kedua membuat subnet C agar semua jarak subnet adalah minimal 0 atau 1 Hop
+* iterasi ketiga dan seterusnya melakukan penggabungan semua 2 subnet yang bisa digabungkan
+* hingga ditemui titik akhir yakni semua subnet tergabung menjadi 1 (G1 /16) 
+
+CIDR IP tree:
+![Alt text](image-55.png)
+* root dari tree adalah netmask /16 dengan ip yang dimulai dari 10.35.0.0 sebagai subnet G1
+* pada pembuatan tree ini saya menggunakan penambahan dari ip terkecil untuk mempermudah
+* kaki kiri dari tree akan selalu menunjukkan awal mula dari ip yang tersedia, sedangkan kaki kanan adalah ip setelah ip kaki kiri
+* pada kaki kiri juga saya berikan batas atas atau broadcast address dari ip dengan netmask tersebut untuk mempermudah penentuan ip di kaki kanan tree
+* kaki kiri tree akan selalu memiliki subnet dengan netmask yang lebih rendah dari kaki kanan untuk mempermudah penentuan ip
+* struktur tree mengikuti aturan binary tree, dan setiap parent node merepresentasikan subnet gabungan dari sebelumnya
+* jadi tree akan selalu mengikuti alur penggabungan dimana start dari subnet G dan end di subnet A
+
+Sehingga diperoleh rekap pembagian ip tree sebagai berikut:<br>
+![Alt text](image-56.png)<br>
+
+**Berikut ini adalah isi config pembagian IP CIDR (Subnetting) di GNS3:**<br>
+Untuk isi config pembagian ip saya set seperti ini:
+* Router memliki `IP NID + 1`
+* Host / Client memiliki `IP Broadcast - 1` atau `IP Client sesubnet - 1`
+* Host / Client memiliki gateway sesuai IP router dalam subnet mereka
+* 1 router bisa memiliki beberapa IP karena dalam 1 router dapat menangani beberapa ethernet interface / subnet
+* Untuk lebih jelasnya:
+![Alt text](image-57.png)
+![Alt text](image-58.png)
+![Alt text](image-59.png)<br>
+* jika sudah maka dalam satu subnet pasti bisa saling ping
+
+**Routing (SAMA SEPERTI SEBELUMNYA)**<br>
+![Alt text](image-35.png)<br>
+Untuk routing dilakukan dengan cara beberapa tahap:
+* routing dilakukan dengan cara static dimana next hop dari routing adalah adjacent router terdekat dengan subnet yang ingin dituju, semisal aura ingin berkenalan dengan subnet a1 maka NID dan netmask diisi milik a1 dan next-hop nya adalah frieren
+* binding everywhere (0.0.0.0) dilakukan seperti gambar di atas
+* kemudian untuk setiap router yang terhubung dengan router lain (nexthop untuk berkenalan lebih dari 1hop) yang memiliki host/client perlu mengenali subnet mereka juga
+* contoh:<br> - flamme harus berkenalan dengan subnet a1 dan a4 <br>
+          - frieren harus berkenalan dengan subnet a1, a2, a3, a4, a5<br>
+          - aura harus berkenalan dengan semua subnet kecuali subnet a8, a10, a11<br>
+          - lawine harus berkenalan dengan subnet a21<br>
+          - linie harus berkenalan dengan subnet a20, a21<br>
+          - eisen harus berkenalan dengan subnet a15, a16, a18, a19, a20, a21<br>
+          - dst.<br>
+* binding everywhere dari setiap router cukup 1 saja yang mengarah ke router aura / terdekat dengan aura, hal ini dilakukan untuk efisiensi routing (100% success)
+* jika aura sudah disetup sebagaimana pengaturan routing di atas maka otomatis semua subnet bisa saling mengenal via aura 
+* Untuk melihat CONFIG SELENGKAPNYA silahkan import file .pkt yang ada di repo ke CPT atau cek config berikut:
+
+* Fern: <br>
+![Alt text](image-60.png)<br>
+* Flamme: <br>
+![Alt text](image-61.png)<br>
+* Himmel: <br>
+![Alt text](image-62.png)<br>
+* Frieren: <br>
+![Alt text](image-63.png)<br>
+* Aura: <br>
+![Alt text](image-64.png)<br>
+* Denken: <br>
+![Alt text](image-65.png)<br>
+* Eisen: <br>
+![Alt text](image-66.png)<br>
+* Lugner: <br>
+![Alt text](image-67.png)<br>
+* Linie: <br>
+![Alt text](image-68.png)<br>
+* Lawine: <br>
+![Alt text](image-69.png)<br>
+* Heiter: <br>
+![Alt text](image-70.png)<br>
+
+**Berikut ini adalah beberapa contoh output ping:**<br>
+![Alt text](image-71.png)<br>
+* ping aura ke subnet a1, a2, a6<br>
+![Alt text](image-72.png)<br>
+* ping aura ke subnet a3, a4, a5<br>
+![Alt text](image-73.png)<br>
+* ping aura ke subnet a7, a8, a9, a10<br>
+![Alt text](image-74.png)<br>
+* ping aura ke subnet a11, a12, a13, a14<br>
+![Alt text](image-75.png)<br>
+* ping aura ke subnet a15, a16, a17, a18<br>
+![Alt text](image-76.png)<br>
+* ping aura ke subnet a19, a20, a21 <br>
